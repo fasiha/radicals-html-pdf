@@ -1,3 +1,5 @@
+// print in Firefox, 89% scale for 2 page.
+// Source: https://en.wikipedia.org/wiki/List_of_kanji_radicals_by_stroke_count
 var {readFileSync, writeFileSync} = require('fs');
 
 /**
@@ -57,4 +59,4 @@ writeFileSync('index.html', `
 <div id="radicals">
   ${k.map(formatRadical).join('\n')}
 </div>
-`)
+`);
