@@ -27,12 +27,19 @@ function cleanNihongo(s) {
   return s;
 }
 
-var k = tsv2json(readFileSync('kangxi-radicals-bushu.tsv', 'utf8'))
-            .map(o => ({...o, meaningReading: cleanNihongo(o.meaningReading)}));
+function clean(o) { return {...o, stokeCount: +o.strokeCount, meaningReading: cleanNihongo(o.meaningReading)}; }
 
-function formatRadical(o) {
-  return `<section><h3>${o.radical.replace(/[\(\), \[\]]/g, '')}</h3>${o.meaningReading.english}, ${
+var k = tsv2json(readFileSync('kangxi-radicals-bushu.tsv', 'utf8')).map(clean);
+
+function formatRadical(o, newStrokeCount = false) {
+  const sup = newStrokeCount ? `<sup>${o.strokeCount}</sup>` : `<sup class="unimportant">${o.strokeCount}</sup>`;
+  return `<section><h3>${o.radical.replace(/[\(\), \[\]]/g, '')}${sup}</h3>${o.meaningReading.english}, ${
       o.meaningReading.kana}</section>`;
+}
+
+function formatRadicals(v) {
+  return v.reduce((prev, curr, i) => prev.concat(formatRadical(curr, curr.strokeCount !== v[i - 1]?.strokeCount)), [])
+      .join('\n');
 }
 
 writeFileSync('index.html', `
@@ -54,9 +61,12 @@ writeFileSync('index.html', `
     margin-top: 0.1em;
     margin-bottom: 0.1em;
   }
+  .unimportant {
+    color: rgb(192,192,192);
+  }
   </style>
 </head>
 <div id="radicals">
-  ${k.map(formatRadical).join('\n')}
+  ${formatRadicals(k)}
 </div>
 `);
