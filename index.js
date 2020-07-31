@@ -34,8 +34,8 @@ var k = tsv2json(readFileSync('kangxi-radicals-bushu.tsv', 'utf8')).map(clean);
 function formatRadical(o, newStrokeCount = false) {
   const sup = newStrokeCount ? `<sup>${o.strokeCount}</sup>` : `<sup class="unimportant">${o.strokeCount}</sup>`;
   // we use <span> for the kanji because we use CSS flex to separate the kanji from the stroke count.
-  return `<section><h3><span>${o.radical.replace(/[\(\), \[\]]/g, '')}</span>${sup}</h3>${o.meaningReading.english}, ${
-      o.meaningReading.kana}</section>`;
+  return `<section><h3><span>${o.radical.replace(/[\(\), \[\]]/g, '')}</span>${sup}</h3>${o.meaningReading.english} ${
+      o.meaningReading.kana.replace(/[;,]/g, '')}</section>`;
 }
 
 function formatRadicals(v) {
@@ -66,9 +66,18 @@ writeFileSync('index.html', `
   .unimportant {
     color: rgb(192,192,192);
   }
+  .footer {
+    padding: 0.25em;
+  }
   </style>
 </head>
 <div id="radicals">
   ${formatRadicals(k)}
+  <section class="footer">
+    Wikipedia: "List of kanji radicals by stroke count"
+  </section>
+  <section class="footer">
+    <a href="https://github.com/fasiha/radicals-html-pdf">github.com/fasiha/radicals-html-pdf</a>
+  </section>
 </div>
 `);
