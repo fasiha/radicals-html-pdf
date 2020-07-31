@@ -33,7 +33,8 @@ var k = tsv2json(readFileSync('kangxi-radicals-bushu.tsv', 'utf8')).map(clean);
 
 function formatRadical(o, newStrokeCount = false) {
   const sup = newStrokeCount ? `<sup>${o.strokeCount}</sup>` : `<sup class="unimportant">${o.strokeCount}</sup>`;
-  return `<section><h3>${o.radical.replace(/[\(\), \[\]]/g, '')}${sup}</h3>${o.meaningReading.english}, ${
+  // we use <span> for the kanji because we use CSS flex to separate the kanji from the stroke count.
+  return `<section><h3><span>${o.radical.replace(/[\(\), \[\]]/g, '')}</span>${sup}</h3>${o.meaningReading.english}, ${
       o.meaningReading.kana}</section>`;
 }
 
@@ -58,8 +59,9 @@ writeFileSync('index.html', `
     page-break-after: avoid;
   }
   h3 {
-    margin-top: 0.1em;
-    margin-bottom: 0.1em;
+    margin: 0.1em 0.25em;
+    display: flex;
+    justify-content: space-between;
   }
   .unimportant {
     color: rgb(192,192,192);
