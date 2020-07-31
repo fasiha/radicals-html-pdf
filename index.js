@@ -78,7 +78,7 @@ writeFileSync('index.html', `
 <div id="radicals">
   ${formatRadicals(k)}
   <section class="footer">
-    Wikipedia: "List of kanji radicals by stroke count"
+    Wikipedia: “List of kanji radicals by stroke count”
   </section>
   <section class="footer">
     <a href="https://github.com/fasiha/radicals-html-pdf">github.com/fasiha/radicals-html-pdf</a>
