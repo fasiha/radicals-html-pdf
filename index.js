@@ -1,4 +1,4 @@
-// print in Firefox, 89% scale for 2 page.
+// print in Firefox, 89% scale for 2 page. Enable background colors for gray.
 // Source: https://en.wikipedia.org/wiki/List_of_kanji_radicals_by_stroke_count
 var {readFileSync, writeFileSync} = require('fs');
 
@@ -34,8 +34,10 @@ var k = tsv2json(readFileSync('kangxi-radicals-bushu.tsv', 'utf8')).map(clean);
 function formatRadical(o, newStrokeCount = false) {
   const sup = newStrokeCount ? `<sup>${o.strokeCount}</sup>` : `<sup class="unimportant">${o.strokeCount}</sup>`;
   // we use <span> for the kanji because we use CSS flex to separate the kanji from the stroke count.
-  return `<section><h3><span>${o.radical.replace(/[\(\), \[\]]/g, '')}</span>${sup}</h3>${o.meaningReading.english} ${
-      o.meaningReading.kana.replace(/[;,]/g, '')}</section>`;
+  return `<section><h3><span>${o.radical.replace(/[\(\), \[\]]/g, '')}</span>${sup}</h3>
+  ${o.meaningReading.kana.replace(/[ ]/g, '')}
+  ${o.meaningReading.english}
+  </section>`;
 }
 
 function formatRadicals(v) {
@@ -57,9 +59,11 @@ writeFileSync('index.html', `
     border: 2px solid rgb(192,192,192);
     border-radius: 10px;
     page-break-after: avoid;
+    padding-top: 0.1em;
+    padding-left: 0.25em;
   }
   h3 {
-    margin: 0.1em 0.25em;
+    margin: 0;
     display: flex;
     justify-content: space-between;
   }
